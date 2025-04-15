@@ -6,15 +6,15 @@ const fs = require('fs');
   const page = await browser.newPage();
 
   await page.goto('https://www.fjordnorway.com/no/arrangementer/haugesund-haugalandet', {
-    waitUntil: 'domcontentloaded',
+    waitUntil: 'networkidle',
     timeout: 60000
   });
 
-  // Vent på at kortene faktisk laster
-  await page.waitForSelector('[data-testid="result-list"] article h3', { timeout: 10000 });
+  // Vent på at arrangementene faktisk vises
+  await page.waitForSelector('.results article', { timeout: 15000 });
 
   const events = await page.evaluate(() => {
-    const items = document.querySelectorAll('[data-testid="result-list"] article');
+    const items = document.querySelectorAll('.results article');
     return Array.from(items).map(item => {
       const title = item.querySelector('h3')?.innerText || 'Uten tittel';
       const time = item.querySelector('time')?.innerText || '';
