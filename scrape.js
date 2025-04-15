@@ -1,75 +1,46 @@
-const fs = require('fs');
 const { chromium } = require('playwright');
+const fs = require('fs');
 
 (async () => {
-  const browser = await chromium.launch({ headless: true });
+  const browser = await chromium.launch({ headless: true, args: ['--no-sandbox'] });
   const page = await browser.newPage();
-  await page.goto('https://www.fjordnorway.com/no/arrangementer/haugesund-haugalandet', { waitUntil: 'networkidle' });
 
-  await page.waitForSelector('[data-testid="teaser-list"] a');
-
-  const events = await page.evaluate(() => {
-    const anchors = Array.from(document.querySelectorAll('[data-testid="teaser-list"] a'));
-    return anchors.slice(0, 5).map(a => {
-      const title = a.querySelector('[data-testid="teaser-title"]')?.textContent?.trim() || 'Uten tittel';
-      const link = a.href;
-      const time = a.querySelector('time')?.getAttribute('datetime') || null;
-      return { title, link, time };
-    });
+  await page.goto('https://www.fjordnorway.com/no/arrangementer/haugesund-haugalandet', {
+    waitUntil: 'networkidle'
   });
 
-  const html = `<!DOCTYPE html>
-<html lang="no">
-<head>
-  <meta charset="UTF-8">
-  <title>Kommende Arrangementer</title>
-  <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;500&display=swap" rel="stylesheet">
-  <style>
-    :root {
-      --brand-dark: #20322F;
-      --brand-light: #F7ECDA;
-      --brand-accent: #E8C070;
+  const events = await page.$$eval('[data-testid="cards-list"] > div', divs =>
+    divs.map(el => {
+      const title = el.querySelector('h3')?.innerText.trim() || 'Ukjent arrangement';
+      const date = el.querySelector('[data-testid="date"]')?.innerText.trim() || '';
+      const location = el.querySelector('[data-testid="location"]')?.innerText.trim() || '';
+      return { title, date, location };
+    })
+  );
+
+  let html = `<html><head>
+    <meta charset="UTF-8">
+    <link href="https://fonts.googleapis.com/css2?family=Lexend&display=swap" rel="stylesheet">
+    <style>
+      body { background: #121212; color: white; font-family: 'Lexend', sans-serif; padding: 2rem; }
+      h1 { font-size: 2rem; margin-bottom: 1rem; }
+      .event { margin-bottom: 1.5rem; }
+      .title { font-size: 1.2rem; font-weight: bold; }
+      .meta { font-size: 0.9rem; color: #bbb; }
+    </style></head><body><h1>Kommende arrangementer i Haugesund</h1>`;
+
+  if (events.length === 0) {
+    html += `<p>Ingen arrangementer funnet.</p>`;
+  } else {
+    for (const e of events) {
+      html += `<div class="event">
+        <div class="title">${e.title}</div>
+        <div class="meta">${e.date} – ${e.location}</div>
+      </div>`;
     }
-    body {
-      margin: 0;
-      font-family: 'Lexend', sans-serif;
-      background-color: var(--brand-dark);
-      color: var(--brand-light);
-      padding: 20px;
-      font-size: 1.5em;
-    }
-    h1 {
-      font-size: 2.2em;
-      color: var(--brand-accent);
-      margin-bottom: 0.5em;
-    }
-    .event {
-      margin-bottom: 1.2em;
-      border-left: 4px solid var(--brand-accent);
-      padding-left: 15px;
-    }
-    .event-title {
-      font-weight: 500;
-      color: var(--brand-light);
-      text-decoration: none;
-    }
-    .event-time {
-      font-size: 0.9em;
-      color: var(--brand-accent);
-    }
-    a { text-decoration: none; }
-  </style>
-</head>
-<body>
-  <h1>Haugesund-arrangementer</h1>
-  ${events.map(ev => `
-    <div class="event">
-      <a href="${ev.link}" class="event-title" target="_blank">${ev.title}</a><br>
-      <span class="event-time">${ev.time ? new Date(ev.time).toLocaleString('no-NO', { dateStyle: 'medium', timeStyle: 'short' }) : 'Ukjent tidspunkt'}</span>
-    </div>
-  `).join('')}
-</body>
-</html>`;
+  }
+
+  html += '</body></html>';
 
   fs.writeFileSync('events.html', html);
   await browser.close();

@@ -1,11 +1,12 @@
 {
   "name": "haugesund-events",
   "version": "1.0.0",
-  "type": "module",
+  "description": "",
+  "main": "scrape.js",
   "scripts": {
-    "scrape": "node scrape.js"
+    "start": "node scrape.js"
   },
   "dependencies": {
-    "playwright": "^1.43.1"
+    "playwright": "^1.42.0"
   }
 }
