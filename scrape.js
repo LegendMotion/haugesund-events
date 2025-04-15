@@ -10,11 +10,14 @@ const fs = require('fs');
     timeout: 60000
   });
 
+  // Vent på at kortene faktisk laster
+  await page.waitForSelector('[data-testid="result-list"] article h3', { timeout: 10000 });
+
   const events = await page.evaluate(() => {
-    const items = document.querySelectorAll('[data-testid="product-card"]');
+    const items = document.querySelectorAll('[data-testid="result-list"] article');
     return Array.from(items).map(item => {
       const title = item.querySelector('h3')?.innerText || 'Uten tittel';
-      const time = item.querySelector('[data-testid="product-card-date"]')?.innerText || '';
+      const time = item.querySelector('time')?.innerText || '';
       return { title, time };
     });
   });
