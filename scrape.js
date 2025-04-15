@@ -3,7 +3,7 @@ const fs = require('fs');
 
 (async () => {
   const browser = await puppeteer.launch({
-    executablePath: '/usr/bin/google-chrome',
+    executablePath: '/usr/bin/google-chrome', // hardcoded full path
     headless: true,
     args: ['--no-sandbox', '--disable-setuid-sandbox']
   });
