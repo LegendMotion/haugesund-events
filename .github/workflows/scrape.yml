@@ -1,0 +1,33 @@
+name: Scrape and Deploy Events
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "0 5 * * *" # Every day at 05:00 UTC
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 20
+
+      - name: Install dependencies
+        run: npm install playwright
+
+      - name: Run scraper
+        run: node scrape.js
+
+      - name: Commit and push
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+          git add events.html
+          git commit -m "Update events [auto]" || echo "No changes to commit"
+          git push
