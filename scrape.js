@@ -1,15 +1,18 @@
-
 const puppeteer = require('puppeteer-core');
 const fs = require('fs');
-const chromium = require('chrome-aws-lambda');
 
 (async () => {
   const browser = await puppeteer.launch({
-    executablePath: process.env.CHROME_PATH || '/usr/bin/google-chrome',
+    executablePath: '/usr/bin/google-chrome',
     headless: true,
     args: ['--no-sandbox', '--disable-setuid-sandbox']
   });
 
+  const page = await browser.newPage();
+  await page.goto('https://www.fjordnorway.com/no/arrangementer/haugesund-haugalandet', {
+    waitUntil: 'networkidle2',
+    timeout: 0
+  });
 
   await page.waitForSelector('[data-testid="teaser-list"] a');
 
