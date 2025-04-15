@@ -2,45 +2,64 @@ const { chromium } = require('playwright');
 const fs = require('fs');
 
 (async () => {
-  const browser = await chromium.launch({ headless: true, args: ['--no-sandbox'] });
+  const browser = await chromium.launch({ headless: true });
   const page = await browser.newPage();
 
   await page.goto('https://www.fjordnorway.com/no/arrangementer/haugesund-haugalandet', {
-    waitUntil: 'networkidle'
+    waitUntil: 'domcontentloaded',
+    timeout: 60000
   });
 
-  const events = await page.$$eval('[data-testid="cards-list"] > div', divs =>
-    divs.map(el => {
-      const title = el.querySelector('h3')?.innerText.trim() || 'Ukjent arrangement';
-      const date = el.querySelector('[data-testid="date"]')?.innerText.trim() || '';
-      const location = el.querySelector('[data-testid="location"]')?.innerText.trim() || '';
-      return { title, date, location };
-    })
-  );
+  const events = await page.evaluate(() => {
+    const items = document.querySelectorAll('[data-testid="product-card"]');
+    return Array.from(items).map(item => {
+      const title = item.querySelector('h3')?.innerText || 'Uten tittel';
+      const time = item.querySelector('[data-testid="product-card-date"]')?.innerText || '';
+      return { title, time };
+    });
+  });
 
-  let html = `<html><head>
+  const html = `
+  <!DOCTYPE html>
+  <html lang="no">
+  <head>
     <meta charset="UTF-8">
+    <title>Arrangementer i Haugesund</title>
     <link href="https://fonts.googleapis.com/css2?family=Lexend&display=swap" rel="stylesheet">
     <style>
-      body { background: #121212; color: white; font-family: 'Lexend', sans-serif; padding: 2rem; }
-      h1 { font-size: 2rem; margin-bottom: 1rem; }
-      .event { margin-bottom: 1.5rem; }
-      .title { font-size: 1.2rem; font-weight: bold; }
-      .meta { font-size: 0.9rem; color: #bbb; }
-    </style></head><body><h1>Kommende arrangementer i Haugesund</h1>`;
-
-  if (events.length === 0) {
-    html += `<p>Ingen arrangementer funnet.</p>`;
-  } else {
-    for (const e of events) {
-      html += `<div class="event">
-        <div class="title">${e.title}</div>
-        <div class="meta">${e.date} – ${e.location}</div>
-      </div>`;
-    }
-  }
-
-  html += '</body></html>';
+      body {
+        background: #121212;
+        color: white;
+        font-family: 'Lexend', sans-serif;
+        padding: 2rem;
+      }
+      h1 {
+        font-size: 2rem;
+        margin-bottom: 1rem;
+        color: #ffde59;
+      }
+      ul {
+        list-style: none;
+        padding: 0;
+      }
+      li {
+        padding: 0.5rem 0;
+        border-bottom: 1px solid #333;
+      }
+      .date {
+        font-size: 0.9rem;
+        color: #999;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Kommende arrangementer i Haugesund</h1>
+    <ul>
+      ${events.map(e => `<li><strong>${e.title}</strong><br><span class="date">${e.time}</span></li>`).join('')}
+    </ul>
+  </body>
+  </html>
+  `;
 
   fs.writeFileSync('events.html', html);
   await browser.close();
