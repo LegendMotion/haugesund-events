@@ -2,7 +2,6 @@ body {
   background: #102B28; /* REKOM Dark Green */
   color: white;
   font-family: 'Lexend', sans-serif;
-  padding: 3rem;
   font-size: 1.8rem;
   line-height: 1.6;
 }
@@ -19,12 +18,12 @@ ul {
 }
 
 li {
-  padding: 1.6rem 0;
+  padding: 1.2rem 0;
   border-bottom: 2px solid #2D4B48;
 }
 
 strong {
-  font-size: 2rem;
+  font-size: 1.8rem;
 }
 
 .date {
