@@ -1,14 +1,16 @@
 body {
-  background: #112d2a; /* REKOM dark green */
-  color: #fff9ef;       /* Soft cream for text */
+  background: #102B28; /* REKOM Dark Green */
+  color: white;
   font-family: 'Lexend', sans-serif;
-  padding: 2rem;
+  padding: 3rem;
+  font-size: 1.8rem;
+  line-height: 1.6;
 }
 
 h1 {
-  font-size: 2rem;
-  margin-bottom: 1rem;
-  color: #e4b865; /* REKOM warm gold */
+  font-size: 3rem;
+  margin-bottom: 2rem;
+  color: #FFDE59; /* Yellow highlight */
 }
 
 ul {
@@ -17,11 +19,15 @@ ul {
 }
 
 li {
-  padding: 0.5rem 0;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 1.2rem 0;
+  border-bottom: 2px solid #2D4B48;
+}
+
+strong {
+  font-size: 2rem;
 }
 
 .date {
-  font-size: 0.9rem;
-  color: #d7c6aa; /* Light soft beige */
+  font-size: 1.6rem;
+  color: #CCCCCC;
 }
