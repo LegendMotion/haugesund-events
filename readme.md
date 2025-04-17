@@ -1,72 +1,98 @@
-# Haugesund Events Scraper 🎤🎸
+# 🗓 Haugesund Events Scraper
 
-📍 **Automatically scrapes upcoming events in Haugesund** from [fjordnorway.com](https://www.fjordnorway.com/no/arrangementer/haugesund-haugalandet), and publishes them as a public webpage, refreshed daily via GitHub Actions.
+Welcome to the **Haugesund Events Scraper**, a lightweight automated project that keeps track of events happening in and around **Haugesund and Haugalandet** 🇳🇴
 
-> Used to help local bars and nightclubs stay ahead of the city's buzz 🕺🍻
-
----
-
-## 🌐 Live View
-
-🖥️ [View the latest events list](https://legendmotion.github.io/haugesund-events/events.html)  
-(*auto-updated every day at 05:00 UTC*)
+This is especially built to serve the **REKOM Haugesund** office by displaying upcoming events on a TV screen — helping bar and nightclub managers stay in the loop on what's going on in the region.
 
 ---
 
-## ⚙️ How It Works
+## 📌 What it does
 
-1. `scrape.js` uses [Puppeteer](https://pptr.dev/) to open the events page
-2. It extracts the **top 5 events**, including:
-   - 🎫 Event title
-   - 🕒 Date & time
-   - 🔗 Link to more info
-3. The output is a styled `events.html` file
-4. GitHub Actions runs daily to update the file and commit it to `main`
-5. GitHub Pages serves the final result
+✅ Scrapes [fjordnorway.com](https://www.fjordnorway.com/no/arrangementer/haugesund-haugalandet) daily for upcoming events  
+✅ Extracts title and date  
+✅ Outputs a simple, readable `events.html`  
+✅ Hosted with GitHub Pages  
+✅ Runs automatically via GitHub Actions  
+✅ Styled with REKOM branding 🎨
 
 ---
 
-## 📦 Tech Stack
+## 🖼 Live View
 
-- [Node.js](https://nodejs.org/)
-- [Puppeteer](https://pptr.dev/) (headless Chrome)
-- [GitHub Actions](https://github.com/features/actions)
-- [GitHub Pages](https://pages.github.com/)
+You can see the updated events here:  
+📺 [legendmotion.github.io/haugesund-events/events.html](https://legendmotion.github.io/haugesund-events/events.html)
 
 ---
 
-## 🛠️ Usage
+## 💼 Use Case: REKOM Haugesund
 
-### Run manually (for testing):
+This project was made for the **REKOM Haugesund** management office.
 
-\`\`\`bash
-npm install puppeteer
+> 👥 The goal: Provide a quick overview of cultural events, concerts, quizzes, shows and happenings in our area — so all managers across our venues (bars and nightclubs) can plan around it, collaborate on promotions, and stay informed.
+
+The display is shown on a TV screen inside our office, updating every morning automatically.
+
+---
+
+## 📁 Project Structure
+
+```
+.
+├── scrape.js       # Scraper powered by Puppeteer
+├── style.css       # External CSS file (REKOM colors!)
+├── events.html     # Auto-generated output
+├── scrape.yml      # GitHub Actions workflow
+├── package.json
+└── README.md
+```
+
+---
+
+## ⚙️ GitHub Actions Workflow
+
+The scraper is run automatically every day at **05:00 UTC** using a GitHub Actions workflow defined in `.github/workflows/scrape.yml`.
+
+It:
+1. Installs Puppeteer
+2. Launches a headless browser
+3. Scrapes the site
+4. Generates `events.html`
+5. Pushes it to the `main` branch
+6. GitHub Pages publishes it ✨
+
+---
+
+## 🎨 Styling
+
+Styled using REKOM's brand colors:
+- 🟢 Dark Green: `#122C28` (used as background)
+- 🟡 Gold: `#E8BC6A`
+- 🟤 Cream: `#F6E9D0`
+
+Typography: Uses **Lexend** for modern and readable text.
+
+---
+
+## 🔧 Setup (for devs)
+
+```bash
+git clone https://github.com/LegendMotion/haugesund-events.git
+cd haugesund-events
+npm install
 node scrape.js
-\`\`\`
-
-This will generate a local `events.html` file.
-
-### Customize or contribute?
-
-Feel free to fork, adapt, and use in your own town!
+```
 
 ---
 
-## 💡 Why This Exists
+## 🤝 Acknowledgements
 
-We use this at the office to keep track of how **busy Haugesund will be**, especially across our bars and nightclubs. It’s like a local radar for nightlife, concerts, and culture.
+Built with passion for Haugesund ❤️  
+Made by **[LegendMotion](https://github.com/LegendMotion)**
 
----
-
-## 📖 License
-
-This project is open-source under the [MIT License](LICENSE).
-
-Feel free to reuse, remix, or improve it!
+🤖 Scraping assistance by **ChatGPT**  
+🧪 Browser automation by **Puppeteer**
 
 ---
 
-## 👤 Creator
-
-Built with ❤️ by [@LegendMotion](https://github.com/LegendMotion)  
-If you use this or build something cool on top of it, let me know!
+  
+**– Stay updated. Stay ahead.**
