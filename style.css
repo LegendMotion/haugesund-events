@@ -1,0 +1,27 @@
+body {
+  background: #112d2a; /* REKOM dark green */
+  color: #fff9ef;       /* Soft cream for text */
+  font-family: 'Lexend', sans-serif;
+  padding: 2rem;
+}
+
+h1 {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+  color: #e4b865; /* REKOM warm gold */
+}
+
+ul {
+  list-style: none;
+  padding: 0;
+}
+
+li {
+  padding: 0.5rem 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.date {
+  font-size: 0.9rem;
+  color: #d7c6aa; /* Light soft beige */
+}
