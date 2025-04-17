@@ -30,33 +30,23 @@ const fs = require('fs');
     });
   });
 
-  const html = `
-  <!DOCTYPE html>
-  <html lang="no">
-  <head>
-    <meta charset="UTF-8">
-    <title>Arrangementer i Haugesund</title>
-    <link href="https://fonts.googleapis.com/css2?family=Lexend&display=swap" rel="stylesheet">
-    <style>
-      body { background: #121212; color: white; font-family: 'Lexend', sans-serif; padding: 2rem; }
-      h1 { font-size: 2rem; margin-bottom: 1rem; color: #ffde59; }
-      ul { list-style: none; padding: 0; }
-      li { padding: 1rem 0; border-bottom: 1px solid #333; }
-      .date { font-size: 0.9rem; color: #aaa; }
-      a { color: #ffde59; text-decoration: none; }
-      a:hover { text-decoration: underline; }
-    </style>
-  </head>
-  <body>
-    <h1>Kommende arrangementer i Haugesund</h1>
-    <ul>
-      ${events.length
-        ? events.map(e => `<li><a href="${e.link}" target="_blank"><strong>${e.title}</strong></a><br><span class="date">${e.time}</span></li>`).join('')
-        : '<li>Ingen arrangementer funnet</li>'}
-    </ul>
-  </body>
-  </html>
-  `;
+const html = `
+<!DOCTYPE html>
+<html lang="no">
+<head>
+  <meta charset="UTF-8">
+  <title>Arrangementer i Haugesund</title>
+  <link href="https://fonts.googleapis.com/css2?family=Lexend&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <h1>Kommende arrangementer i Haugesund</h1>
+  <ul>
+    ${events.map(e => `<li><strong>${e.title}</strong><br><span class="date">${e.time}</span></li>`).join('')}
+  </ul>
+</body>
+</html>
+`;
 
   fs.writeFileSync('events.html', html);
   await browser.close();
